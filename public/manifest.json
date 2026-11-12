@@ -1,9 +1,9 @@
 {
   "appId": "com.check.app",
   "available": true,
-  "version": "1.0.5",
-  "packageUrl": "https://chiildish.github.io/check-updates/versions/1.0.5/web.zip",
-  "sha256": "cc4daf9a8dd30679a407bef8be6743517f9797701b8a61ea8bb0f249e6033545",
+  "version": "1.0.6",
+  "packageUrl": "https://chiildish.github.io/check-updates/versions/1.0.6/web.zip",
+  "sha256": "a9a22c6e39638fb3d73b3298ebfcf01a2d2917a55aabe4374763b664ec0a20f9",
   "minimumNativeVersion": "1.0.0",
-  "publishedAt": "2026-11-12T16:16:25.785947+00:00"
+  "publishedAt": "2026-11-12T16:19:47.191579+00:00"
 }
