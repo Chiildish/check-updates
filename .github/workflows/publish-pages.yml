@@ -1,0 +1,42 @@
+name: Publish OTA to GitHub Pages
+on:
+  push:
+    branches: [main]
+    paths: ['public/**', '.github/workflows/publish-pages.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate OTA manifest
+        run: |
+          python - <<'PY'
+          import json,hashlib,re
+          from pathlib import Path
+          m=json.loads(Path('public/manifest.json').read_text())
+          assert m['appId']=='com.check.app'
+          assert isinstance(m['available'],bool)
+          if m['available']:
+              v=m['version'];assert re.fullmatch(r'\d+\.\d+\.\d+',v)
+              assert re.fullmatch(r'\d+\.\d+\.\d+',m['minimumNativeVersion'])
+              assert m['packageUrl']==f'https://chiildish.github.io/check-updates/versions/{v}/web.zip'
+              p=Path('public/versions')/v/'web.zip'
+              assert p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest()==m['sha256']
+          PY
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - uses: actions/deploy-pages@v4
+        id: deployment
